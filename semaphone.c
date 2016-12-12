@@ -10,27 +10,13 @@
 #include <fcntl.h>
 
 
-int main(){
-  printf("Enter command: ");
-  char *arg = calloc(1,255); 
-  fgets(arg, 255, stdin);
-  arg = strsep(&arg, "\n"); //Remove newline since "the newline is retained."
-  
-  int i = 0;
-  char *s;
-  char *ret[20];
-  while(arg){
-    s = strsep(&arg, " ");
-    //printf("%s\n", s);
-    ret[i] = s;
-    //printf("%s\n",ret[i]);
-    i++;
-  }
-  
-  int key = ftok(ret[0],22);
+int main(int argc, char *argv[]){
   int semid;
+  int key = ftok("makefile" , 22);
   int sc;
-  int sm; //shared memory
+  FILE *f;
+  int file;
+  
   
   if (strcmp(ret[0], "-c")){
     int fd = open(ret[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
