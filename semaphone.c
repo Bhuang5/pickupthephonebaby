@@ -12,26 +12,23 @@
 
 int main(int argc, char *argv[]){
   int semid;
+  int m;
   int key = ftok("writefile" , 22);
   int sc;
   FILE *f;
   int file;
   
-
-  if (!strcmp(argv[1], "-c")){
-    int fd = open("read.txt", O_CREAT | O_WRONLY | O_APPEND, 0644);
-    close(fd);
-  
-    sm = shmget(key, 1024, IPC_CREAT | 0664);
-    printf("shared mem created!! %d\n", sm);
-    
-    semid = semget(key, 1, IPC_CREAT | 0644);
-    printf("semaphore created %d\n", semid);
-
+  if(!strcmp(argv[1],"-c")){
     union semun su;
+    m = shmget(key,1024, IPC_CREAT | IPC_EXCL | 0644);
+    printf("memory: %d\n", m);
+    file = open("read.txt", O_CREAT | O_TRUNC, 0644);
+    printf("file: %d\n",file);
+    semid = semget(key,1, IPC_CREAT | IPC_EXCL | 0644);
+    printf("semaphore: %d\n",semid);
     su.val = 1;
-    sc = semctl(semid, 0, SETVAL, su);
-    printf("value set: %d\n", sc);
+    sc = semctl(semid,0,SETVAL,su);
+    printf("value: %d\n",sc);
   }
   
   if(!strcmp(argv[1], "-r")){
