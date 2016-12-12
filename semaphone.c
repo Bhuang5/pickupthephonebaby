@@ -18,8 +18,8 @@ int main(int argc, char *argv[]){
   int file;
   
   
-  if (strcmp(ret[0], "-c")){
-    int fd = open(ret[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
+  if (!strcmp(argv[1], "-c")){
+    int fd = open("read.txt", O_CREAT | O_WRONLY | O_APPEND, 0644);
     close(fd);
   
     sm = shmget(key, 1024, IPC_CREAT | 0664);
@@ -28,36 +28,21 @@ int main(int argc, char *argv[]){
     semid = semget(key, 1, IPC_CREAT | 0644);
     printf("semaphore created %d\n", semid);
 
-    union semun{
-      int val;
-    }su;
+    union semun su;
     su.val = 1;
     //setting semaphore value
     sc = semctl(semid, 0, SETVAL, su);
     printf("value set: %d\n", sc);
   }
-
-  if (strcmp(ret[0], "-r")){
-    
-  }
-
   
-  /*
-  int semid = semget(ftok("makefile",22),1,0);
-  printf("[%d] Before access %d\n",getpid(),x);
-  struct sembuf sb;
-  sb.sem_num = 0;
-  sb.sem_flg = SEM_UNDO;
-  sb.sem_op = -1;
+  if(!strncmp(argv[1], "-r", strlen(argv[1])){
+      semid = semget(key, 1, 0);
+      //removing a semaphore
+      sc = semctl(semid, 0, IPC_RMID);
+      printf("semaphore removed: %d\n", sc);
+    }
+   
+    
+    
 
-  semop(semid, &sb, 1);
-  printf("[%d] Im in!\n", getpid());
-
-  //sleep(x);
-  sb.sem_op=1;
-  semop(semid,&sb,1);
-
-  printf("[%d] Im done!\n", getpid());
-
-    */
 }
