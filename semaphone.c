@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[]){
   int semid;
-  int key = ftok("makefile" , 22);
+  int key = ftok("writefile" , 22);
   int sc;
   FILE *f;
   int file;
